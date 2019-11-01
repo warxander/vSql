@@ -192,17 +192,12 @@ namespace vSql
 
                         using (var reader = await command.ExecuteReaderAsync())
                         {
-                            if (reader.HasRows)
+                            while (await reader.ReadAsync())
                             {
-                                while (await reader.ReadAsync())
-                                {
-                                    var resultLine = new Dictionary<string, Object>();
-
-                                    for (int i = 0; i < reader.FieldCount; i++)
-                                        resultLine.Add(reader.GetName(i), reader.IsDBNull(i) ? null : reader.GetValue(i));
-
-                                    result.Add(resultLine);
-                                }
+                                result.Add(Enumerable.Range(0, reader.FieldCount).ToDictionary(
+                                    i => reader.GetName(i),
+                                    i => reader.IsDBNull(i) ? null : reader.GetValue(i)
+                                ));
                             }
                         }
                     }
