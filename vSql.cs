@@ -28,6 +28,13 @@ namespace vSql
 
         public VSql()
         {
+            Exports.Add("ready", new Action<CallbackDelegate>((callback) =>
+            {
+                Init();
+
+                callback.Invoke();
+            }));
+
             Exports.Add("execute_async", new Action<string, IDictionary<string, object>, CallbackDelegate>(async (query, parameters, callback) =>
             {
                 Init();

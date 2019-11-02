@@ -44,6 +44,13 @@ local function safeParameters(parameters)
 end
 
 
+function vSql.ready(callback)
+	assert(callback and type(callback) == 'function', 'Callback must be a function type!')
+
+	exports.vSql:ready(callback)
+end
+
+
 function vSql.Async.execute(query, parameters, callback)
 	exports.vSql:execute_async(safeQuery(query), safeParameters(parameters), safeCallback(callback))
 end
