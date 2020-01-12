@@ -4,6 +4,7 @@ using CitizenFX.Core.Native;
 using MySql.Data.MySqlClient;
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ namespace vSql
 {
     public class VSql : BaseScript
     {
+        private static ConcurrentQueue<Action> callbackQueue;
         private static string connectionString;
         private static bool wasInit;
 
@@ -28,11 +30,18 @@ namespace vSql
 
         public VSql()
         {
+            callbackQueue = new ConcurrentQueue<Action>();
+
+            Tick += OnTick;
+
             Exports.Add("ready", new Action<CallbackDelegate>((callback) =>
             {
                 Init();
 
-                callback.Invoke();
+                if (callback != null)
+                {
+                    callbackQueue.Enqueue(() => callback.Invoke());
+                }
             }));
 
             Exports.Add("execute_async", new Action<string, IDictionary<string, object>, CallbackDelegate>(async (query, parameters, callback) =>
@@ -43,8 +52,7 @@ namespace vSql
 
                 if (callback != null)
                 {
-                    await Delay(0);
-                    callback.Invoke(numberOfUpdatedRows);
+                    callbackQueue.Enqueue(() => callback.Invoke(numberOfUpdatedRows));
                 }
             }));
 
@@ -56,8 +64,7 @@ namespace vSql
 
                 if (callback != null)
                 {
-                    await Delay(0);
-                    callback.Invoke(isSucceed);
+                    callbackQueue.Enqueue(() => callback.Invoke(isSucceed));
                 }
             }));
 
@@ -69,8 +76,7 @@ namespace vSql
 
                 if (callback != null)
                 {
-                    await Delay(0);
-                    callback.Invoke(result);
+                    callbackQueue.Enqueue(() => callback.Invoke(result));
                 }
             }));
 
@@ -82,8 +88,7 @@ namespace vSql
 
                 if (callback != null)
                 {
-                    await Delay(0);
-                    callback.Invoke(result);
+                    callbackQueue.Enqueue(() => callback.Invoke(result));
                 }
             }));
         }
@@ -231,6 +236,14 @@ namespace vSql
 
             connectionString = Function.Call<string>(Hash.GET_CONVAR, "mysql_connection_string");
             wasInit = true;
+        }
+
+        private static Task OnTick()
+        {
+            while (callbackQueue.TryDequeue(out Action action))
+                action.Invoke();
+
+            return null;
         }
     }
 }
