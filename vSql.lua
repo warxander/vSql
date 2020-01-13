@@ -35,6 +35,8 @@ end
 local function safeParameters(parameters)
  	if parameters == nil then
 		return { [''] = true }
+	elseif next(parameters) == nil then
+		return { [''] = true }
 	end
 
 	assert(type(parameters) == 'table', 'Parameters must be in table!')
