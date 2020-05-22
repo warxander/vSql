@@ -33,12 +33,13 @@ end
 
 
 local function safeParameters(parameters)
- 	if parameters == nil then
-		return { [''] = true }
+	if parameters then
+		assert(type(parameters) == 'table', 'Parameters must be in table!')
 	end
 
-	assert(type(parameters) == 'table', 'Parameters must be in table!')
-	assert(parameters[1] == nil, 'Parameters must be a dictionary!')
+	if not parameters or not next(parameters) then
+		return { [''] = true }
+	end
 
 	return parameters
 end
