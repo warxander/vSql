@@ -94,7 +94,7 @@ namespace vSql
         }
 
         private static void PrintException(Exception ex)
-        { CitizenFX.Core.Debug.Write("^4[" + DateTime.Now + "] ^2[vSql] ^1[Error] " + ex.Message); }
+        { CitizenFX.Core.Debug.Write("^4[" + DateTime.Now + "] ^2[vSql] ^1[Error] " + ex.Message + "\n"); }
 
         private static async Task<int> ExecuteAsync(string query, IDictionary<string, object> parameters)
         {
