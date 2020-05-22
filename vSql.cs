@@ -93,6 +93,9 @@ namespace vSql
             }));
         }
 
+        private static void PrintException(Exception ex)
+        { CitizenFX.Core.Debug.Write("^4[" + DateTime.Now + "] ^2[vSql] ^1[Error] " + ex.Message); }
+
         private static async Task<int> ExecuteAsync(string query, IDictionary<string, object> parameters)
         {
             int numberOfUpdatedRows = 0;
@@ -111,7 +114,7 @@ namespace vSql
                 }
             }
             catch (Exception ex)
-            { CitizenFX.Core.Debug.Write(ex.ToString()); }
+            { PrintException(ex); }
 
             return numberOfUpdatedRows;
         }
@@ -148,19 +151,19 @@ namespace vSql
                             }
                             catch (Exception ex)
                             {
-                                CitizenFX.Core.Debug.Write(ex.ToString());
+                                PrintException(ex);
 
                                 try
                                 { await transaction.RollbackAsync(); }
                                 catch (Exception rollbackEx)
-                                { CitizenFX.Core.Debug.Write(rollbackEx.ToString()); }
+                                { PrintException(rollbackEx); }
                             }
                         }
                     }
                 }
             }
             catch (Exception ex)
-            { CitizenFX.Core.Debug.Write(ex.ToString()); }
+            { PrintException(ex); }
 
             return isSucceed;
         }
@@ -183,7 +186,7 @@ namespace vSql
                 }
             }
             catch (Exception ex)
-            { CitizenFX.Core.Debug.Write(ex.ToString()); }
+            { PrintException(ex); }
 
             return result;
         }
@@ -216,7 +219,7 @@ namespace vSql
                 }
             }
             catch (Exception ex)
-            { CitizenFX.Core.Debug.Write(ex.ToString()); }
+            { PrintException(ex); }
 
             return result;
         }
