@@ -1,7 +1,7 @@
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 
 using System;
 using System.Collections.Concurrent;
