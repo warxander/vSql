@@ -16,6 +16,7 @@ namespace vSql
         private static ConcurrentQueue<Action> callbackQueue;
         private static string connectionString;
         private static bool wasInit;
+        private static Task completedTask = Task.FromResult(false);
 
         private class DbConnection : IDisposable
         {
@@ -246,7 +247,7 @@ namespace vSql
             while (callbackQueue.TryDequeue(out Action action))
                 action.Invoke();
 
-            return null;
+            return completedTask;
         }
     }
 }
