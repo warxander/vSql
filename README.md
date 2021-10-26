@@ -1,5 +1,5 @@
 # vSql
-FiveM resource for connecting to MySQL database.
+FiveM MySQL Lua library.
 
 # Features
 * **Async mode only**
@@ -11,7 +11,7 @@ FiveM resource for connecting to MySQL database.
 * Download and put into `resources/` folder
 * Add `ensure vSql` to `server.cfg`
 * Add `set mysql_connection_string "server=localhost;database=db;userid=user;password=pwd"` to `server.cfg`
-* Add `server_script "@vSql/vSql.lua"` to `__resource.lua`
+* Add `server_script "@vSql/vSql.lua"` to `fxmanifest.lua`
 
 # API
 ```lua
