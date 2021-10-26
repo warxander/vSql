@@ -1,9 +1,16 @@
 vSql = { }
 vSql.__index = vSql
 
-
 vSql.Async = { }
 
+local vSqlImpl = nil
+local function getVSqlImpl()
+	if not vSqlImpl then
+		vSqlImpl = exports.vSql
+	end
+
+	return vSqlImpl
+end
 
 local function safeCallback(callback)
 	if callback then
@@ -48,25 +55,25 @@ end
 function vSql.ready(callback)
 	assert(callback and type(callback) == 'function', 'Callback must be a function type!')
 
-	exports.vSql:ready(callback)
+	getVSqlImpl():ready(callback)
 end
 
 
 function vSql.Async.execute(query, parameters, callback)
-	exports.vSql:execute_async(safeQuery(query), safeParameters(parameters), safeCallback(callback))
+	getVSqlImpl():execute_async(safeQuery(query), safeParameters(parameters), safeCallback(callback))
 end
 
 
 function vSql.Async.fetchScalar(query, parameters, callback)
-	exports.vSql:fetch_scalar_async(safeQuery(query), safeParameters(parameters), safeCallback(callback))
+	getVSqlImpl():fetch_scalar_async(safeQuery(query), safeParameters(parameters), safeCallback(callback))
 end
 
 
 function vSql.Async.fetchAll(query, parameters, callback)
-	exports.vSql:fetch_all_async(safeQuery(query), safeParameters(parameters), safeCallback(callback))
+	getVSqlImpl():fetch_all_async(safeQuery(query), safeParameters(parameters), safeCallback(callback))
 end
 
 
 function vSql.Async.transaction(queries, parameters, callback)
-	exports.vSql:transaction_async(safeQueries(queries), safeParameters(parameters), safeCallback(callback))
+	getVSqlImpl():transaction_async(safeQueries(queries), safeParameters(parameters), safeCallback(callback))
 end
