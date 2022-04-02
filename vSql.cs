@@ -17,7 +17,7 @@ namespace vSql
         private static ConcurrentQueue<Action> callbackQueue;
         private static string connectionString;
         private static bool wasInit;
-        private static Task completedTask = Task.FromResult(false);
+        private static readonly Task completedTask = Task.FromResult(false);
 
         private class DbConnection : IDisposable
         {
@@ -99,7 +99,7 @@ namespace vSql
         }
 
         private static void PrintException(Exception ex)
-        { CitizenFX.Core.Debug.Write("^4[" + DateTime.Now + "] ^2[vSql] ^1[Error] " + ex.Message + "\n"); }
+        { Debug.Write("^4[" + DateTime.Now + "] ^2[vSql] ^1[Error] " + ex.Message + "\n"); }
 
         private static void ScheduleTick()
         {
