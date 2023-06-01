@@ -6,6 +6,7 @@
     <Platforms>AnyCPU</Platforms>
     <TargetName>$(AssemblyName).net</TargetName>
     <DefineConstants>SERVER</DefineConstants>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
